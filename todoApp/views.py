@@ -19,12 +19,11 @@ def task(request):
 
     elif request.method == 'POST':
         serializer = SerializerTodo(data=request.data)
-
-        if serializer.is_valid() and len(request.data['task']) <= 50 and len(request.data['description']) <= 150:
+        if serializer.is_valid() and len(request.data['task']) <= 50 and len(request.data['description']) <= 128:
             serializer.save()
             return Response(serializer.data)
         else:
-            return Response(f"Error en el post, no debes superar los 50 caracteres para task (enviaste {len(request.data['task'])}) y los 150 para description (enviaste {len(request.data['description'])})")
+            return Response(f"Error en el post, no debes superar los 50 caracteres para task (enviaste {len(request.data['task'])}) y los 128 para description (enviaste {len(request.data['description'])})")
 
 
 @api_view(['GET'])
@@ -54,11 +53,11 @@ def taskPK(request, pk):
         task = Todo.objects.get(id = pk)
         serializer = SerializerTodo(instance=task, data=request.data)
 
-        if serializer.is_valid() and len(task.task) <= 50 and len(task.description) <= 150:
+        if serializer.is_valid() and len(task.task) <= 50 and len(task.description) <= 128:
             serializer.save()
             return Response(serializer.data)
         else:
-            return Response(f"Error en el post, no debes superar los 50 caracteres para task (enviaste {len(task.task)}) y los 150 para description (enviaste {len(task.description)})") #no logre recuperar el campo models.CharField(max_length=50) y asi no hardcodear el 50 y el 150 en el mensaje
+            return Response(f"Error en el post, no debes superar los 50 caracteres para task (enviaste {len(task.task)}) y los 128 para description (enviaste {len(task.description)})") #no logre recuperar el campo models.CharField(max_length=50) y asi no hardcodear el 50 y el 150 en el mensaje
 
 
     elif request.method == 'DELETE':
